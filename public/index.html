@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#080b13" />
+  <meta name="description" content="CINEVA — Book your cinema seat, pick your time, and get your digital ticket." />
+  <title>CINEVA | Cinema Ticket Booking</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-shell">
+    <header class="site-header" id="top">
+      <a class="brand" href="#/" aria-label="CINEVA Home"><span class="brand-mark"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 12.5 20 4l14 8.5v15L20 36 6 27.5v-15Z" stroke="currentColor" stroke-width="2.5"/><path d="m16 13 12 7-12 7V13Z" fill="currentColor"/></svg></span><span>CINE<span class="brand-accent">VA</span><small>CINEMA EXPERIENCE</small></span></a>
+      <nav class="main-nav" aria-label="Main menu"><a class="nav-link active" href="#/" data-nav="home" data-i18n="navHome">الرئيسية</a><a class="nav-link" href="#/movies" data-nav="movies" data-i18n="navMovies">الأفلام</a><a class="nav-link" href="#/bookings" data-nav="bookings" data-i18n="navBookings">حجوزاتي</a></nav>
+      <div class="header-actions"><button class="language-switch" type="button" id="langSwitch" title="Change language">EN</button><span class="header-divider"></span><div id="accountControls"><button class="button button-small button-outline" id="headerLogin" type="button" data-i18n="signIn">تسجيل الدخول</button></div></div>
+    </header>
+    <main id="app" aria-live="polite"><div class="loader"><span></span><span></span><span></span></div></main>
+    <footer class="site-footer"><div class="footer-top"><a class="brand brand-footer" href="#/"><span class="brand-mark"><svg viewBox="0 0 40 40" fill="none"><path d="M6 12.5 20 4l14 8.5v15L20 36 6 27.5v-15Z" stroke="currentColor" stroke-width="2.5"/><path d="m16 13 12 7-12 7V13Z" fill="currentColor"/></svg></span><span>CINE<span class="brand-accent">VA</span><small>CINEMA EXPERIENCE</small></span></a><span id="footerSlogan" data-i18n="footerSlogan">كل قصة تستحق مقعدًا.</span></div><div class="footer-bottom"><span>© 2026 CINEVA · <span data-i18n="demoFooter">مشروع جامعي تجريبي — بدون دفع حقيقي</span></span><span>HTML · CSS · JavaScript · Node.js</span></div></footer>
+  </div>
+  <div id="modalRoot"></div><div id="toastRoot" role="status" aria-live="polite"></div>
+</body>
+</html>

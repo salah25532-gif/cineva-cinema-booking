@@ -1,0 +1,10 @@
+{
+  "name": "cineva-cinema-booking",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cinema Ticket Booking System for an e-commerce security coursework prototype",
+  "scripts": { "start": "node server.js", "dev": "node --watch server.js" },
+  "dependencies": { "pg": "^8.13.0" },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED"
+}
