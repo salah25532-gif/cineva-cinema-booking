@@ -49,6 +49,7 @@ async function startSession(req, res, user) {
 }
 function scrypt(password, salt) { return crypto.scryptSync(password, salt, 64).toString('hex'); }
 function validEmail(email) { return typeof email === 'string' && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+function strongPassword(password) { return typeof password === 'string' && password.length >= 8 && password.length <= 128 && /[a-z]/.test(password) && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[^\p{L}\p{N}\s]/u.test(password); }
 function limitAuth(req, email) { const key = `${req.socket.remoteAddress}:${email}`; const now = Date.now(); let x = attempts.get(key) || { count: 0, reset: now + 15 * 60 * 1000 }; if (now > x.reset) x = { count: 0, reset: now + 15 * 60 * 1000 }; x.count++; attempts.set(key, x); if (attempts.size > 4000) attempts.clear(); return x.count <= 12; }
 function readBody(req) { return new Promise((resolve, reject) => { let size = 0; const chunks = []; req.on('data', c => { size += c.length; if (size > 32 * 1024) { reject({ status: 413, message: 'Request is too large.' }); req.destroy(); } else chunks.push(c); }); req.on('end', () => { try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8'))); } catch { reject({ status: 400, message: 'Invalid JSON.' }); } }); req.on('error', reject); }); }
 function confirmSameOrigin(req) { if (req.method === 'GET' || req.method === 'HEAD') return true; const origin = req.headers.origin; if (!origin) return true; try { const url = new URL(origin); return url.host === req.headers.host && (url.protocol === 'http:' || url.protocol === 'https:'); } catch { return false; } }
@@ -69,7 +70,8 @@ async function api(req, res, pathname, url) {
   }
   if (req.method === 'POST' && pathname === '/api/auth/register') {
     const b = await readBody(req); if (!b || typeof b !== 'object') return error(res, 400, 'Invalid request body.'); const name = typeof b.name === 'string' ? b.name.trim() : ''; const email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : ''; const password = b.password;
-    if (name.length < 2 || name.length > 70 || !validEmail(email) || typeof password !== 'string' || password.length < 8 || password.length > 128) return error(res, 400, 'Use a valid name, email, and password (8–128 characters).');
+    if (name.length < 2 || name.length > 70 || !validEmail(email)) return error(res, 400, 'Please enter a valid name and email address.');
+    if (!strongPassword(password)) return error(res, 400, 'Password must be 8–128 characters and contain an uppercase letter, a lowercase letter, a digit, and a special symbol.');
     if (!limitAuth(req, email)) return error(res, 429, 'Too many attempts. Try again later.');
     const salt = crypto.randomBytes(16).toString('hex');
     const user = { id: crypto.randomUUID(), name, email, salt, hash: scrypt(password, salt), createdAt: new Date().toISOString() };
