@@ -10,6 +10,8 @@ const HOST = process.env.HOST || '127.0.0.1';
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = path.join(__dirname, 'public');
 const DAY_MS = 86400000;
+const RESET_TTL_MS = 15 * 60 * 1000;
+const RESET_RESPONSE = 'If an account exists for this email, we will send a reset link shortly.';
 const ROWS = 'ABCDEFGH';
 const SHOW_TIMES = ['14:30', '17:15', '20:00', '22:15'];
 const MOVIES = [
@@ -51,6 +53,53 @@ function scrypt(password, salt) { return crypto.scryptSync(password, salt, 64).t
 function validEmail(email) { return typeof email === 'string' && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 function strongPassword(password) { return typeof password === 'string' && password.length >= 8 && password.length <= 128 && /[a-z]/.test(password) && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[^\p{L}\p{N}\s]/u.test(password); }
 function limitAuth(req, email) { const key = `${req.socket.remoteAddress}:${email}`; const now = Date.now(); let x = attempts.get(key) || { count: 0, reset: now + 15 * 60 * 1000 }; if (now > x.reset) x = { count: 0, reset: now + 15 * 60 * 1000 }; x.count++; attempts.set(key, x); if (attempts.size > 4000) attempts.clear(); return x.count <= 12; }
+// Brevo transactional-email API. Configure credentials only as Render environment variables.
+function resetEmailConfigured() {
+  try {
+    const base = new URL(process.env.PUBLIC_BASE_URL || '');
+    return Boolean(process.env.BREVO_API_KEY && validEmail(process.env.MAIL_FROM) &&
+      (base.protocol === 'https:' || (process.env.NODE_ENV !== 'production' && base.origin.startsWith('http://127.0.0.1:'))));
+  } catch { return false; }
+}
+async function sendResetEmail(email, token) {
+  const base = new URL(process.env.PUBLIC_BASE_URL);
+  // The token travels in the URL fragment; browsers don't send fragments in HTTP requests.
+  const link = base.origin + base.pathname.replace(/\/$/, '') + '/#/reset/' + token;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000);
+  try {
+    const reply = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST', signal: controller.signal,
+      headers: { 'api-key': process.env.BREVO_API_KEY, 'Content-Type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({
+        sender: { name: 'CINEVA', email: process.env.MAIL_FROM },
+        to: [{ email }],
+        subject: 'CINEVA | Password reset / إعادة تعيين كلمة المرور',
+        textContent: 'Hello,\n\nUse this link within 15 minutes to reset your CINEVA password:\n' + link +
+          '\n\nIf you did not request this, you can ignore this email. The link works once.\n\n' +
+          'مرحباً، يمكنك إعادة تعيين كلمة المرور خلال 15 دقيقة باستخدام الرابط أعلاه. إذا لم تطلب ذلك، تجاهل الرسالة.'
+      })
+    });
+    if (!reply.ok) throw new Error('Email provider rejected the reset email. HTTP ' + reply.status);
+  } finally { clearTimeout(timer); }
+}
+const resetLimits = new Map();
+function limitReset(req, email) {
+  const now = Date.now();
+  const keys = ['ip:' + req.socket.remoteAddress, 'email:' + email];
+  for (const key of keys) {
+    const entry = resetLimits.get(key);
+    if (entry && entry.reset > now && entry.count >= (key.startsWith('ip:') ? 20 : 4)) return false;
+  }
+  for (const key of keys) {
+    let entry = resetLimits.get(key);
+    if (!entry || entry.reset <= now) entry = { count: 0, reset: now + 30 * 60 * 1000 };
+    entry.count++;
+    resetLimits.set(key, entry);
+  }
+  if (resetLimits.size > 4000) resetLimits.clear();
+  return true;
+}
 function readBody(req) { return new Promise((resolve, reject) => { let size = 0; const chunks = []; req.on('data', c => { size += c.length; if (size > 32 * 1024) { reject({ status: 413, message: 'Request is too large.' }); req.destroy(); } else chunks.push(c); }); req.on('end', () => { try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8'))); } catch { reject({ status: 400, message: 'Invalid JSON.' }); } }); req.on('error', reject); }); }
 function confirmSameOrigin(req) { if (req.method === 'GET' || req.method === 'HEAD') return true; const origin = req.headers.origin; if (!origin) return true; try { const url = new URL(origin); return url.host === req.headers.host && (url.protocol === 'http:' || url.protocol === 'https:'); } catch { return false; } }
 function getSeats(db, movieId, date, time) { return [...new Set(db.bookings.filter(b => b.movieId === movieId && b.date === date && b.time === time).flatMap(b => b.seats))]; }
@@ -87,6 +136,49 @@ async function api(req, res, pathname, url) {
     const db = await readDb(), u = db.users.find(u => u.email === email); const salt = u ? u.salt : '0'.repeat(32), expected = u ? u.hash : '0'.repeat(128); const hash = scrypt(password, salt);
     if (!u || !crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(expected, 'hex'))) return error(res, 401, 'Incorrect email or password.');
     attempts.delete(`${req.socket.remoteAddress}:${email}`); return startSession(req, res, u);
+  }
+  if (req.method === 'POST' && pathname === '/api/auth/forgot-password') {
+    const b = await readBody(req);
+    const email = typeof b?.email === 'string' ? b.email.trim().toLowerCase() : '';
+    if (!validEmail(email)) return error(res, 400, 'Please enter a valid email address.');
+    if (!resetEmailConfigured()) return error(res, 503, 'Password reset email is not configured. Contact the site administrator.');
+    // Restrict requests per account and IP without disclosing whether the account exists.
+    if (!limitReset(req, email)) return error(res, 429, 'Too many reset requests. Please try again later.');
+    const user = (await readDb()).users.find(u => u.email === email);
+    if (user) {
+      const token = crypto.randomBytes(32).toString('base64url');
+      try {
+        await sendResetEmail(email, token);
+        await editDb(db => {
+          db.passwordResets = db.passwordResets.filter(r => r.expires > Date.now() && r.userId !== user.id);
+          db.passwordResets.push({ userId: user.id, tokenHash: tokenDigest(token), expires: Date.now() + RESET_TTL_MS });
+        });
+      } catch (err) {
+        // Generic public response avoids leaking registration status.
+        console.error('Could not send password reset email:', err.message);
+      }
+    }
+    return json(res, 200, { message: RESET_RESPONSE });
+  }
+  if (req.method === 'POST' && pathname === '/api/auth/reset-password') {
+    const b = await readBody(req);
+    const token = b?.token;
+    const password = b?.password;
+    if (typeof token !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(token)) return error(res, 400, 'Invalid or expired password reset link.');
+    if (!strongPassword(password)) return error(res, 400, 'Password must be 8–128 characters and contain an uppercase letter, a lowercase letter, a digit, and a special symbol.');
+    if (!limitReset(req, 'consume')) return error(res, 429, 'Too many attempts. Please try again later.');
+    const digest = tokenDigest(token);
+    await editDb(db => {
+      const reset = db.passwordResets.find(r => r.tokenHash === digest && r.expires > Date.now());
+      const user = reset && db.users.find(u => u.id === reset.userId);
+      if (!user) throw { status: 400, message: 'Invalid or expired password reset link.' };
+      const salt = crypto.randomBytes(16).toString('hex');
+      user.salt = salt;
+      user.hash = scrypt(password, salt);
+      db.passwordResets = db.passwordResets.filter(r => r.userId !== user.id);
+      db.sessions = db.sessions.filter(s => s.userId !== user.id);
+    });
+    return json(res, 200, { ok: true });
   }
   if (req.method === 'POST' && pathname === '/api/auth/logout') {
     const token = cookies(req).cineva_session;

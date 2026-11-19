@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const FOLDER = path.join(__dirname, 'storage');
 const FILE = path.join(FOLDER, 'data.json');
-const initial = () => ({ users: [], bookings: [], sessions: [] });
+const initial = () => ({ users: [], bookings: [], sessions: [], passwordResets: [] });
 
 let pool = null;
 let ready = null;
@@ -25,7 +25,7 @@ if (process.env.DATABASE_URL) {
 }
 function ensureShape(db) {
   if (!db || typeof db !== 'object') throw new Error('Invalid stored database data.');
-  for (const key of ['users', 'bookings', 'sessions']) if (!Array.isArray(db[key])) db[key] = [];
+  for (const key of ['users', 'bookings', 'sessions', 'passwordResets']) if (!Array.isArray(db[key])) db[key] = [];
   return db;
 }
 async function initialize() {
