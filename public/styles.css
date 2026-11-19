@@ -44,3 +44,9 @@ html[dir=ltr] .hero-frame{transform:rotate(-7deg)}html[dir=ltr] .floating-rating
  .seat-legend{gap:12px}
  .legend-item{font-size:10px;gap:6px}
 }
+
+/* Recover account controls */
+.forgot-link-row{display:flex;justify-content:flex-end;margin:-5px 0 17px}
+.text-action{border:0;background:transparent;color:#ffcd7c;font-size:12px;font-weight:750;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:5px 2px}
+.text-action:hover,.text-action:focus-visible{color:#ffe0ad}
+.auth-back{text-align:center;margin-top:18px}

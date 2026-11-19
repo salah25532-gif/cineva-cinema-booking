@@ -18,6 +18,7 @@ const dictionary = {
     simpleSteps:'ثلاث خطوات تفصلك عن الشاشة الكبيرة',stepOne:'اختر الفيلم',stepOneDesc:'تصفح الأفلام واختر القصة التي تناسب ذوقك.',stepTwo:'حدد مقعدك',stepTwoDesc:'اختر موعد العرض ومقعدك من خريطة المقاعد.',stepThree:'احصل على تذكرتك',stepThreeDesc:'أكد الحجز واستلم تذكرة إلكترونية تجريبية.',
     home:'الرئيسية',bookingTitle:'احجز مقعدك',bookingIntro:'اختر موعد العرض، ثم حدد مقاعدك المفضلة.',selectShowing:'اختر موعد العرض',selectSeats:'اختر المقاعد',chooseDate:'اختر اليوم',chooseTime:'الأوقات المتاحة',screen:'الشاشة من هذه الجهة',available:'متاح',selected:'محدد',taken:'محجوز',vip:'VIP (+2.50 د.أ)',vipNote:'صفّا G و H مقاعد مميزة، بإضافة 2.50 د.أ لكل مقعد.',seatCount:'مقاعد محددة',orderSummary:'ملخص الحجز',movie:'الفيلم',date:'التاريخ',time:'الوقت',seats:'المقاعد',none:'لم يتم الاختيار',tickets:'التذاكر',serviceFee:'رسوم الخدمة',total:'المجموع',taxNote:'لا توجد عملية دفع حقيقية. الحجز لأغراض المشروع الجامعي فقط.',confirm:'تأكيد الحجز التجريبي',selectSeatFirst:'اختر مقعدًا واحدًا على الأقل',seatMax:'يمكن حجز 8 مقاعد كحد أقصى.',
     welcome:'أهلاً بعودتك',welcomeSub:'سجّل الدخول أو أنشئ حسابًا لإتمام الحجز.',createAccount:'إنشاء حساب',login:'تسجيل الدخول',fullName:'الاسم الكامل',email:'البريد الإلكتروني',password:'كلمة المرور',namePlaceholder:'أدخل اسمك الكامل',emailPlaceholder:'name@example.com',passwordPlaceholder:'أدخل كلمة المرور',passwordPlaceholderStrong:'أنشئ كلمة مرور قوية',showPassword:'إظهار كلمة المرور',hidePassword:'إخفاء كلمة المرور',passwordRulesTitle:'شروط كلمة المرور',pwLength:'من 8 إلى 128 حرفًا',pwLower:'حرف إنجليزي صغير (a–z)',pwUpper:'حرف إنجليزي كبير (A–Z)',pwDigit:'رقم واحد على الأقل (0–9)',pwSymbol:'رمز خاص مثل ! أو @ أو #',pwPrompt:'استوفِ الشروط الخمسة لإنشاء الحساب.',pwKeepGoing:'أكمل الشروط المتبقية لتقوية كلمة المرور.',pwStrong:'ممتاز! كلمة المرور تستوفي كل الشروط.',pwError:'كلمة المرور ضعيفة؛ لازم تستوفي الشروط الخمسة الموضّحة.',authFoot:'كلمات المرور مشفّرة اشتقاقيًا، وبيانات الحجز محفوظة على خادم الموقع.',authError:'تعذّر إكمال العملية، تأكد من البيانات وحاول مجددًا.',needLogin:'سجّل دخولك أولًا لإتمام الحجز.',loginSuccess:'تم تسجيل الدخول بنجاح.',
+    forgotPassword:'نسيت كلمة المرور؟',resetTitle:'استعادة كلمة المرور',resetSubtitle:'اكتب البريد الإلكتروني المسجّل بالحساب حتى نرسل لك رابط الاستعادة.',sendResetLink:'إرسال رابط الاستعادة',backToLogin:'العودة لتسجيل الدخول',resetSentTitle:'تحقق من بريدك الإلكتروني',resetSentMessage:'إذا كان البريد مرتبطًا بحساب، رح يصلك رابط لإعادة تعيين كلمة المرور. افحص مجلد الرسائل غير المرغوبة أيضًا.',newPasswordTitle:'تعيين كلمة مرور جديدة',newPasswordSubtitle:'اختَر كلمة مرور قوية. رابط الاستعادة صالح لمدة 15 دقيقة ويُستخدم مرة واحدة.',newPassword:'كلمة المرور الجديدة',confirmNewPassword:'تأكيد كلمة المرور الجديدة',resetPasswordButton:'تغيير كلمة المرور',passwordMismatch:'كلمتا المرور غير متطابقتين.',resetComplete:'تم تغيير كلمة المرور. سجّل دخولك بكلمة المرور الجديدة.',resetUnavailable:'إرسال بريد الاستعادة غير مفعّل بعد. تواصل مع مدير الموقع.',resetTooMany:'محاولات كثيرة. جرّب لاحقاً.',resetInvalid:'رابط الاستعادة غير صالح أو انتهت صلاحيته. اطلب رابطاً جديداً.',
     success:'تم تأكيد حجزك!',successDesc:'مقعدك جاهز، وهذه تذكرتك الإلكترونية.',entryTicket:'تذكرة دخول',ticketId:'رمز الحجز',bookingDate:'تاريخ الحجز',printTicket:'طباعة التذكرة',bookAnother:'حجز فيلم آخر',ticketDemo:'هذه تذكرة تجريبية لمشروع جامعي، وليست تذكرة صالحة لدخول سينما حقيقية.',
     myBookings:'حجوزاتي',bookingsDesc:'كل تذاكرك الإلكترونية في مكان واحد.',noBookings:'ما عندك حجوزات بعد',noBookingsDesc:'ابدأ باختيار فيلم، وبعد تأكيد الحجز رح تظهر تذكرتك هون.',needAccount:'سجّل دخولك لمشاهدة حجوزاتك',needAccountDesc:'حجوزاتك مرتبطة بحسابك حتى تقدر ترجع لها بأي وقت.',viewTicket:'عرض التذكرة',confirmedStatus:'مؤكد',noShowings:'لا يوجد عرض متاح في هذا الوقت.',loading:'جاري التحميل...',error:'صار خطأ. جرّب مرة ثانية.',reload:'إعادة المحاولة',
     day0:'اليوم',day1:'غدًا',justBooked:'تم حجز المقاعد بنجاح.',seatConflict:'أحد المقاعد تم حجزه للتو. اختر مقعدًا ثانيًا.',security:'الحجز محمي بالجلسات والتحقق من توافر المقاعد.',continue:'تابع الحجز',featuredLabel:'عرض مميز'
@@ -29,12 +30,13 @@ const dictionary = {
     simpleSteps:'Three simple steps to the big screen',stepOne:'Pick a movie',stepOneDesc:'Discover what’s showing and find a story you love.',stepTwo:'Choose your seat',stepTwoDesc:'Select your showtime and favorite seat on the map.',stepThree:'Get your ticket',stepThreeDesc:'Confirm your booking and receive a demo e-ticket.',
     home:'Home',bookingTitle:'Book your seat',bookingIntro:'Pick a showtime and select the perfect seat.',selectShowing:'Choose showtime',selectSeats:'Select seats',chooseDate:'Choose a date',chooseTime:'Available times',screen:'SCREEN THIS WAY',available:'Available',selected:'Selected',taken:'Taken',vip:'VIP (+2.50 JOD)',vipNote:'Rows G and H are VIP seats (+2.50 JOD per seat).',seatCount:'Selected seats',orderSummary:'Booking summary',movie:'Movie',date:'Date',time:'Time',seats:'Seats',none:'Not selected',tickets:'Tickets',serviceFee:'Service fee',total:'Total',taxNote:'No actual payment is processed. This is a university project demo.',confirm:'Confirm demo booking',selectSeatFirst:'Choose at least one seat',seatMax:'You can reserve up to 8 seats.',
     welcome:'Welcome back',welcomeSub:'Sign in or create an account to complete your booking.',createAccount:'Create account',login:'Sign in',fullName:'Full name',email:'Email address',password:'Password',namePlaceholder:'Enter your full name',emailPlaceholder:'name@example.com',passwordPlaceholder:'Enter your password',passwordPlaceholderStrong:'Create a strong password',showPassword:'Show password',hidePassword:'Hide password',passwordRulesTitle:'Password requirements',pwLength:'8–128 characters',pwLower:'One lowercase letter (a–z)',pwUpper:'One uppercase letter (A–Z)',pwDigit:'At least one number (0–9)',pwSymbol:'A special symbol such as ! @ #',pwPrompt:'Meet all five requirements to create your account.',pwKeepGoing:'Complete the remaining password requirements.',pwStrong:'Great! Your password meets every requirement.',pwError:'Your password is too weak. Meet all five requirements shown.',authFoot:'Passwords are securely hashed and bookings are stored securely on the server.',authError:'Unable to complete the request. Please check your details.',needLogin:'Please sign in to confirm your booking.',loginSuccess:'Signed in successfully.',
+    forgotPassword:'Forgot password?',resetTitle:'Reset your password',resetSubtitle:'Enter your registered email and we will email you a secure reset link.',sendResetLink:'Send reset link',backToLogin:'Back to sign in',resetSentTitle:'Check your inbox',resetSentMessage:'If the email belongs to an account, we will send a password reset link. Check your spam folder too.',newPasswordTitle:'Choose a new password',newPasswordSubtitle:'Use a strong password. This link is valid for 15 minutes and can be used once.',newPassword:'New password',confirmNewPassword:'Confirm new password',resetPasswordButton:'Change password',passwordMismatch:'Passwords do not match.',resetComplete:'Your password has been changed. Sign in with your new password.',resetUnavailable:'Password reset email is not configured yet. Contact the site owner.',resetTooMany:'Too many attempts. Please try later.',resetInvalid:'This link is invalid or expired. Request a new link.',
     success:'Your booking is confirmed!',successDesc:'Your seat is ready. Here is your digital ticket.',entryTicket:'ADMIT ONE · DEMO',ticketId:'Booking reference',bookingDate:'Booked on',printTicket:'Print ticket',bookAnother:'Book another movie',ticketDemo:'This is a university demo ticket, not a valid cinema admission ticket.',
     myBookings:'My bookings',bookingsDesc:'All your digital tickets in one place.',noBookings:'No bookings yet',noBookingsDesc:'Pick a movie and confirm your booking to see your ticket here.',needAccount:'Sign in to view your bookings',needAccountDesc:'Your reservations are linked to your account, so you can access them anytime.',viewTicket:'View ticket',confirmedStatus:'Confirmed',noShowings:'No screening available at this time.',loading:'Loading...',error:'Something went wrong. Please try again.',reload:'Try again',
     day0:'Today',day1:'Tomorrow',justBooked:'Seats successfully reserved.',seatConflict:'A selected seat was just booked. Please choose another.',security:'Session-based authentication and seat availability checks.',continue:'Continue',featuredLabel:'FEATURED MOVIE'
   }
 };
-const state = { lang: localStorage.getItem('cineva-lang') === 'en' ? 'en' : 'ar', config: null, user: null, filter: 'all', movieId: null, date: null, time: null, seats: new Set(), taken: new Set(), booking: null, authTab: 'login', authOpen: false };
+const state = { lang: localStorage.getItem('cineva-lang') === 'en' ? 'en' : 'ar', config: null, user: null, filter: 'all', movieId: null, date: null, time: null, seats: new Set(), taken: new Set(), booking: null, authTab: 'login', authOpen: false, resetToken: null };
 const app = document.getElementById('app');
 const modalRoot = document.getElementById('modalRoot');
 const $ = id => document.getElementById(id);
@@ -150,17 +152,66 @@ function updatePasswordGuidance() {
   input.setAttribute('aria-invalid',String(input.value.length>0&&!allValid));
   if (allValid) {const error=$('authError');if(error)error.textContent='';}
 }
+function passwordGuidanceMarkup() {
+  const requirements=[['length','pwLength'],['lower','pwLower'],['upper','pwUpper'],['digit','pwDigit'],['symbol','pwSymbol']];
+  return `<div class="password-guidance" id="passwordGuidance"><p class="rules-title">${t('passwordRulesTitle')}</p><ul class="password-rules" id="passwordRules">${requirements.map(([name,key])=>`<li data-password-rule="${name}"><span class="rule-mark" aria-hidden="true">○</span><span>${t(key)}</span></li>`).join('')}</ul><p class="password-feedback" id="passwordFeedback" aria-live="polite">${t('pwPrompt')}</p></div>`;
+}
+function passwordInputMarkup(isNew) {
+  return `<div class="form-field"><label class="field-label" for="authPassword">${t(isNew?'newPassword':'password')}</label><div class="password-control"><input id="authPassword" name="password" type="password" autocomplete="${isNew?'new-password':'current-password'}" minlength="${isNew?8:1}" maxlength="128" placeholder="${t(isNew?'passwordPlaceholderStrong':'passwordPlaceholder')}" ${isNew?'aria-describedby="passwordGuidance"':''} required><button class="password-toggle" type="button" data-action="toggle-password" data-target="authPassword" aria-label="${t('showPassword')}" title="${t('showPassword')}" aria-pressed="false">${icons.eye}</button></div></div>`;
+}
 function renderModal() {
   if(!state.authOpen){modalRoot.innerHTML='';return;}
-  const signup=state.authTab==='register';
-  const requirements=[['length','pwLength'],['lower','pwLower'],['upper','pwUpper'],['digit','pwDigit'],['symbol','pwSymbol']];
-  const rules=signup?`<div class="password-guidance" id="passwordGuidance"><p class="rules-title">${t('passwordRulesTitle')}</p><ul class="password-rules" id="passwordRules">${requirements.map(([name,key])=>`<li data-password-rule="${name}"><span class="rule-mark" aria-hidden="true">○</span><span>${t(key)}</span></li>`).join('')}</ul><p class="password-feedback" id="passwordFeedback" aria-live="polite">${t('pwPrompt')}</p></div>`:'';
-  modalRoot.innerHTML=`<div class="modal-overlay" id="modalOverlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><button type="button" class="modal-close" data-action="close-auth" aria-label="Close">×</button><div class="modal-logo">${icons.lock}</div><h2 id="authTitle">${t('welcome')}</h2><p class="modal-subtitle">${t('welcomeSub')}</p><div class="auth-tabs"><button type="button" class="auth-tab ${!signup?'active':''}" data-tab="login">${t('login')}</button><button type="button" class="auth-tab ${signup?'active':''}" data-tab="register">${t('createAccount')}</button></div><form id="authForm">${signup?`<label class="form-field"><span>${t('fullName')}</span><input name="name" type="text" autocomplete="name" placeholder="${t('namePlaceholder')}" minlength="2" maxlength="70" required></label>`:''}<label class="form-field"><span>${t('email')}</span><input name="email" type="email" autocomplete="email" placeholder="${t('emailPlaceholder')}" required></label><div class="form-field"><label class="field-label" for="authPassword">${t('password')}</label><div class="password-control"><input id="authPassword" name="password" type="password" autocomplete="${signup?'new-password':'current-password'}" minlength="${signup?8:1}" maxlength="128" placeholder="${signup?t('passwordPlaceholderStrong'):t('passwordPlaceholder')}" ${signup?'aria-describedby="passwordGuidance"':''} required><button class="password-toggle" type="button" data-action="toggle-password" aria-label="${t('showPassword')}" title="${t('showPassword')}" aria-pressed="false">${icons.eye}</button></div></div>${rules}<p class="form-error" id="authError" aria-live="polite"></p><button class="button button-primary button-block" type="submit" id="submitAuth">${signup?t('createAccount'):t('login')}</button></form><p class="auth-foot">${t('authFoot')}</p></div></div>`;
-  if (signup) updatePasswordGuidance();
+  const mode=state.authTab, signup=mode==='register', reset=mode==='reset', forgot=mode==='forgot', sent=mode==='forgotSent';
+  const recovery=reset||forgot||sent;
+  const title=sent?t('resetSentTitle'):forgot?t('resetTitle'):reset?t('newPasswordTitle'):t('welcome');
+  const subtitle=sent?t('resetSentMessage'):forgot?t('resetSubtitle'):reset?t('newPasswordSubtitle'):t('welcomeSub');
+  const tabs=recovery?'':`<div class="auth-tabs"><button type="button" class="auth-tab ${!signup?'active':''}" data-tab="login">${t('login')}</button><button type="button" class="auth-tab ${signup?'active':''}" data-tab="register">${t('createAccount')}</button></div>`;
+  const emailField=`<label class="form-field"><span>${t('email')}</span><input name="email" type="email" autocomplete="email" placeholder="${t('emailPlaceholder')}" maxlength="254" required></label>`;
+  let form='';
+  if(forgot) {
+    form=`<form id="forgotForm">${emailField}<p class="form-error" id="authError" aria-live="polite"></p><button class="button button-primary button-block" type="submit" id="submitAuth">${t('sendResetLink')}</button></form>`;
+  } else if(reset) {
+    form=`<form id="resetForm">${passwordInputMarkup(true)}<div class="form-field"><label class="field-label" for="confirmPassword">${t('confirmNewPassword')}</label><div class="password-control"><input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required><button class="password-toggle" type="button" data-action="toggle-password" data-target="confirmPassword" aria-label="${t('showPassword')}" title="${t('showPassword')}" aria-pressed="false">${icons.eye}</button></div></div>${passwordGuidanceMarkup()}<p class="form-error" id="authError" aria-live="polite"></p><button class="button button-primary button-block" type="submit" id="submitAuth">${t('resetPasswordButton')}</button></form>`;
+  } else if(!sent) {
+    form=`<form id="authForm">${signup?`<label class="form-field"><span>${t('fullName')}</span><input name="name" type="text" autocomplete="name" placeholder="${t('namePlaceholder')}" minlength="2" maxlength="70" required></label>`:''}${emailField}${passwordInputMarkup(signup)}${signup?passwordGuidanceMarkup():`<div class="forgot-link-row"><button type="button" class="text-action" data-action="forgot-password">${t('forgotPassword')}</button></div>`}<p class="form-error" id="authError" aria-live="polite"></p><button class="button button-primary button-block" type="submit" id="submitAuth">${signup?t('createAccount'):t('login')}</button></form>`;
+  }
+  const back=recovery?`<div class="auth-back"><button type="button" class="text-action" data-action="back-to-login">${t('backToLogin')}</button></div>`:'';
+  modalRoot.innerHTML=`<div class="modal-overlay" id="modalOverlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><button type="button" class="modal-close" data-action="close-auth" aria-label="Close">×</button><div class="modal-logo">${icons.lock}</div><h2 id="authTitle">${title}</h2><p class="modal-subtitle">${subtitle}</p>${tabs}${form}${back}${recovery?'':`<p class="auth-foot">${t('authFoot')}</p>`}</div></div>`;
+  if(signup||reset)updatePasswordGuidance();
   const input=modalRoot.querySelector('input');if(input)input.focus();
 }
 function openAuth(tab='login'){state.authTab=tab;state.authOpen=true;renderModal();}
-function closeAuth(){state.authOpen=false;renderModal();}
+function closeAuth(){state.authOpen=false;state.resetToken=null;renderModal();}
+async function submitRecovery(form, mode) {
+  const button=$('submitAuth'), error=$('authError');
+  const data=Object.fromEntries(new FormData(form));
+  if(mode==='reset'){
+    if(!Object.values(passwordChecks(data.password||'')).every(Boolean)){error.textContent=t('pwError');updatePasswordGuidance();return;}
+    if(data.password!==data.confirmPassword){error.textContent=t('passwordMismatch');return;}
+    if(!state.resetToken){error.textContent=t('resetInvalid');return;}
+  }
+  button.disabled=true;button.textContent=t('loading');
+  try {
+    if(mode==='forgot'){
+      await request('/api/auth/forgot-password',{method:'POST',body:JSON.stringify({email:data.email})});
+      state.authTab='forgotSent';renderModal();
+    } else {
+      await request('/api/auth/reset-password',{method:'POST',body:JSON.stringify({token:state.resetToken,password:data.password})});
+      state.user=null;state.resetToken=null;openAuth('login');updateHeader();toast(t('resetComplete'));
+    }
+  } catch(err) {
+    error.textContent=err.status===503?t('resetUnavailable'):err.status===429?t('resetTooMany'):err.status===400&&mode==='reset'?t('resetInvalid'):err.message||t('error');
+    button.disabled=false;button.textContent=t(mode==='forgot'?'sendResetLink':'resetPasswordButton');
+  }
+}
+function openResetLinkIfPresent(){
+  const [route,token]=parseRoute();
+  if(route!=='reset')return;
+  // Remove token from the address bar as soon as the SPA consumes it.
+  history.replaceState(null,'',location.pathname+location.search+'#/');
+  if(!token || !/^[A-Za-z0-9_-]{43}$/.test(token)){openAuth('forgot');toast(t('resetInvalid'),true);return;}
+  state.resetToken=token;openAuth('reset');
+}
 async function submitAuth(form) {
   const data=Object.fromEntries(new FormData(form));
   if (state.authTab==='register' && !Object.values(passwordChecks(data.password||'')).every(Boolean)) {
@@ -184,21 +235,22 @@ async function confirmBooking() {
 
 document.addEventListener('click',async event=>{
   const target=event.target.closest('[data-action],[data-filter],[data-seat],[data-date],[data-time],[data-tab]');if(!target)return;
-  if(target.dataset.action){switch(target.dataset.action){case 'open-auth':openAuth();break;case 'close-auth':closeAuth();break;case 'toggle-password':{const input=$('authPassword');if(!input)break;const visible=input.type==='password';input.type=visible?'text':'password';target.setAttribute('aria-pressed',String(visible));target.setAttribute('aria-label',t(visible?'hidePassword':'showPassword'));target.title=t(visible?'hidePassword':'showPassword');target.innerHTML=visible?icons.eyeOff:icons.eye;break;}case 'account':location.hash='#/bookings';break;case 'logout':try{await request('/api/auth/logout',{method:'POST',body:'{}'});state.user=null;updateHeader();render();}catch{toast(t('error'),true);}break;case 'confirm-booking':confirmBooking();break;case 'print':window.print();break;case 'reload':render();break;}return;}
+  if(target.dataset.action){switch(target.dataset.action){case 'open-auth':openAuth();break;case 'close-auth':closeAuth();break;case 'forgot-password':openAuth('forgot');break;case 'back-to-login':state.resetToken=null;openAuth('login');break;case 'toggle-password':{const input=$(target.dataset.target||'authPassword');if(!input)break;const visible=input.type==='password';input.type=visible?'text':'password';target.setAttribute('aria-pressed',String(visible));target.setAttribute('aria-label',t(visible?'hidePassword':'showPassword'));target.title=t(visible?'hidePassword':'showPassword');target.innerHTML=visible?icons.eyeOff:icons.eye;break;}case 'account':location.hash='#/bookings';break;case 'logout':try{await request('/api/auth/logout',{method:'POST',body:'{}'});state.user=null;updateHeader();render();}catch{toast(t('error'),true);}break;case 'confirm-booking':confirmBooking();break;case 'print':window.print();break;case 'reload':render();break;}return;}
   if(target.dataset.filter){state.filter=target.dataset.filter;renderHome();$('movie-section')?.scrollIntoView({block:'start'});return;}
   if(target.dataset.date){state.date=target.dataset.date;state.time=state.config.times.find(x=>availableTime(state.date,x))||state.config.times[0];state.seats.clear();state.taken.clear();renderBooking();refreshSeats();return;}
   if(target.dataset.time){state.time=target.dataset.time;state.seats.clear();state.taken.clear();renderBooking();refreshSeats();return;}
   if(target.dataset.seat){const seat=target.dataset.seat;if(state.taken.has(seat))return;if(state.seats.has(seat))state.seats.delete(seat);else{if(state.seats.size>=8)return toast(t('seatMax'),true);state.seats.add(seat);}renderSeats();renderSummary();return;}
   if(target.dataset.tab){state.authTab=target.dataset.tab;renderModal();}
 });
-modalRoot.addEventListener('input',event=>{if(event.target.id==='authPassword'&&state.authTab==='register')updatePasswordGuidance();});
-modalRoot.addEventListener('submit',event=>{if(event.target.id==='authForm'){event.preventDefault();submitAuth(event.target);}});
+modalRoot.addEventListener('input',event=>{if(event.target.id==='authPassword'&&['register','reset'].includes(state.authTab))updatePasswordGuidance();});
+modalRoot.addEventListener('submit',event=>{if(event.target.id==='authForm'){event.preventDefault();submitAuth(event.target);}else if(['forgotForm','resetForm'].includes(event.target.id)){event.preventDefault();submitRecovery(event.target,state.authTab);}});
 modalRoot.addEventListener('click',event=>{if(event.target.id==='modalOverlay')closeAuth();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.authOpen)closeAuth();});
 $('langSwitch').addEventListener('click',()=>setLanguage(state.lang==='ar'?'en':'ar'));
-window.addEventListener('hashchange',()=>{render();if(!['movies','how'].includes(parseRoute()[0]))window.scrollTo({top:0,behavior:'instant'});});
+window.addEventListener('hashchange',()=>{openResetLinkIfPresent();render();if(!['movies','how'].includes(parseRoute()[0]))window.scrollTo({top:0,behavior:'instant'});});
 (async function boot(){
   setLanguage(state.lang);
+  openResetLinkIfPresent();
   try{const [config,auth]=await Promise.all([request('/api/config'),request('/api/auth/me')]);state.config=config;state.user=auth.user;render();}
   catch(error){app.innerHTML=`<section class="empty-state"><h2>${t('error')}</h2><p>${e(error.message)}</p>${btn(t('reload'),'button-primary','data-action="reload"')}</section>`;}
 })();
