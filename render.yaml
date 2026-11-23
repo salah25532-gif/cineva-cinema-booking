@@ -1,4 +1,5 @@
-# Deploy as a Render Blueprint (New > Blueprint) with Neon PostgreSQL.
+# إعداد نشر التطبيق على Render وربطه بقاعدة Neon PostgreSQL.
+# تحديد إعدادات خدمة الموقع على Render.
 services:
   - type: web
     name: cineva-cinema-booking
@@ -7,10 +8,11 @@ services:
     buildCommand: npm install --omit=dev
     startCommand: npm start
     healthCheckPath: /api/config
+    # متغيرات إعدادات التشغيل والاتصال السري.
     envVars:
       - key: NODE_ENV
         value: production
       - key: HOST
         value: 0.0.0.0
       - key: DATABASE_URL
-        sync: false  # Paste the Neon connection string privately in Render.
+        sync: false  # إضافة رابط Neon داخل إعدادات Render الخاصة فقط.

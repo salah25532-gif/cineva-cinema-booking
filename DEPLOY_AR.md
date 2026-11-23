@@ -1,16 +1,16 @@
-# نشر مشروع CINEVA مجانًا — خطوات عملية
+# نشر مشروع MOVIE HOUSE مجانًا — خطوات عملية
 
 هذا المشروع يستخدم HTML + CSS + JavaScript + Node.js، وسيعمل برابط عام على Render. حسابات المستخدمين والحجوزات تُخزَّن في Neon PostgreSQL حتى لا تضيع عند إيقاف الخادم المجاني. لا توجد مدفوعات حقيقية.
 
 ## 1 — قاعدة البيانات (Neon)
 1. افتح https://neon.tech وسجّل حسابًا مجانيًا.
-2. أنشئ مشروعًا جديدًا باسم `cineva`. اترك نوع قاعدة البيانات PostgreSQL.
+2. أنشئ مشروعًا جديدًا باسم `movie_house`. اترك نوع قاعدة البيانات PostgreSQL.
 3. اختر **Connect** وانسخ رابط الاتصال (Connection string) الذي يشبه `postgresql://.../neondb?sslmode=require`.
 4. احتفظ بالرابط لنفسك؛ يحتوي كلمة مرور قاعدة البيانات. لا تضعه في GitHub ولا ترسله في المحادثة.
 
 ## 2 — رفع ملفات الموقع (GitHub)
-1. افتح https://github.com وأنشئ مستودعًا (Repository) باسم `cineva-cinema-booking`؛ يمكن أن يكون خاصًا.
-2. فك ضغط النسخة المرفقة، وافتح المجلد `cinema_booking_system`.
+1. افتح https://github.com وأنشئ مستودعًا (Repository) باسم `movie_house-cinema-booking`؛ يمكن أن يكون خاصًا.
+2. فك ضغط النسخة المرفقة، وافتح المجلد `movie_house_booking_system`.
 3. من GitHub اضغط **Add file → Upload files**، واسحب **محتويات المجلد** (مثل `server.js` و`datastore.js` و`public/` و`render.yaml`) إلى صفحة الرفع. لا ترفع الملف المضغوط وحده.
 4. اضغط **Commit changes**. لا ترفع مجلد `node_modules` أو ملف `.env` أو `storage/data.json`.
 

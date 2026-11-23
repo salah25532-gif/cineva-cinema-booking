@@ -1,4 +1,4 @@
-# CINEVA — Cinema Ticket Booking System
+# MOVIE HOUSE — Cinema Ticket Booking System
 
 A responsive bilingual (Arabic/English) cinema-booking coursework prototype based on the provided E-Commerce Security project proposal.
 
@@ -20,7 +20,7 @@ Local mode runs without installing packages. Online deployment needs the `pg` pa
 ## How to run
 
 1. Extract the ZIP.
-2. Open a terminal inside `cinema_booking_system`.
+2. Open a terminal inside `movie_house_booking_system`.
 3. Run:
 
    ```bash
@@ -58,7 +58,7 @@ Local mode runs without installing packages. Online deployment needs the `pg` pa
 ## Project structure
 
 ```text
-cinema_booking_system/
+movie_house_booking_system/
   server.js            Node.js API and static server
   datastore.js         Local JSON / cloud PostgreSQL persistence
   render.yaml          Render deployment configuration

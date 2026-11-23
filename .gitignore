@@ -1,0 +1,11 @@
+node_modules/
+storage/data.json
+.env
+.env.*
+*.log
+ipa key.txt
+*api*key*.txt
+*.pem
+*.p12
+*.pfx
+*.key

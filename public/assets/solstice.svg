@@ -18,6 +18,6 @@
 <path d="M341 566h35m-18-18v44" stroke="#ffc578" stroke-width="4" opacity=".7"/>
 <path d="M0 853c144-54 261-6 370-30 175-37 244 2 350-16v133H0Z" fill="#202234"/><rect width="720" height="940" filter="url(#grain)" opacity=".24"/><rect y="580" width="720" height="360" fill="url(#shade)"/>
 <path d="M48 53h39M48 53v39M672 53h-39M672 53v39" fill="none" stroke="#ffffff" stroke-opacity=".4" stroke-width="2"/>
-<text x="52" y="883" fill="#ffffff" fill-opacity=".5" font-family="Arial, sans-serif" font-size="12" letter-spacing="5">CINEVA ORIGINAL</text>
+<text x="52" y="883" fill="#ffffff" fill-opacity=".5" font-family="Arial, sans-serif" font-size="12" letter-spacing="5">MOVIE HOUSE ORIGINAL</text>
 <text x="668" y="883" fill="#ffffff" fill-opacity=".5" font-family="Arial, sans-serif" font-size="12" text-anchor="end" letter-spacing="2">2026</text>
 </svg>

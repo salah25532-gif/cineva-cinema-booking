@@ -36,11 +36,13 @@ const dictionary = {
     day0:'Today',day1:'Tomorrow',justBooked:'Seats successfully reserved.',seatConflict:'A selected seat was just booked. Please choose another.',security:'Session-based authentication and seat availability checks.',continue:'Continue',featuredLabel:'FEATURED MOVIE'
   }
 };
-const state = { lang: localStorage.getItem('cineva-lang') === 'en' ? 'en' : 'ar', config: null, user: null, filter: 'all', movieId: null, date: null, time: null, seats: new Set(), taken: new Set(), booking: null, authTab: 'login', authOpen: false, resetToken: null };
+// حفظ حالة المستخدم والفيلم والمقاعد أثناء التصفح.
+const state = { lang: localStorage.getItem('movie_house-lang') === 'en' ? 'en' : 'ar', config: null, user: null, filter: 'all', movieId: null, date: null, time: null, seats: new Set(), taken: new Set(), booking: null, authTab: 'login', authOpen: false, resetToken: null };
 const app = document.getElementById('app');
 const modalRoot = document.getElementById('modalRoot');
 const $ = id => document.getElementById(id);
 const t = key => dictionary[state.lang][key] || key;
+// ترميز النصوص لمنع إدخال HTML غير موثوق.
 const e = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money = n => Number(n || 0).toFixed(2) + (state.lang === 'ar' ? ' د.أ' : ' JOD');
 const movieName = m => state.lang === 'ar' ? m.titleAr : m.title;
@@ -50,12 +52,17 @@ const weekday = d => new Intl.DateTimeFormat(state.lang === 'ar' ? 'ar-JO' : 'en
 const timeLabel = x => { if (!x) return t('none'); const [h,m]=x.split(':').map(Number); return state.lang === 'ar' ? `${((h+11)%12)+1}:${String(m).padStart(2,'0')} ${h>=12?'م':'ص'}` : `${((h+11)%12)+1}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`; };
 const dirArrow = () => state.lang === 'ar' ? '←' : '→';
 const btn = (text, cls, attrs='') => `<button type="button" class="button ${cls}" ${attrs}>${text}</button>`;
+// معرفة الوقت الحالي حسب توقيت عمّان.
 const nowAmman = () => new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Amman',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
+// منع اختيار موعد عرض انتهى وقته.
 const availableTime = (date,time) => date !== state.config.today || time > nowAmman();
+// البحث عن الفيلم باستخدام معرّفه.
 const getMovie = id => state.config.movies.find(m => m.id === id);
+// قراءة المسار الحالي من رابط الصفحة.
 const parseRoute = () => (location.hash || '#/').slice(1).split('/').filter(Boolean);
 const formatSeats = seats => seats.length ? seats.join(' · ') : t('none');
 
+// إرسال طلبات للخادم ومعالجة أخطاء الاستجابة.
 async function request(url, options={}) {
   const r = await fetch(url, { credentials:'same-origin', headers:{ 'Content-Type':'application/json' }, ...options });
   let json; try { json = await r.json(); } catch { throw new Error(t('error')); }
@@ -63,7 +70,7 @@ async function request(url, options={}) {
   return json;
 }
 function toast(message, isError=false) { const root=$('toastRoot'); root.innerHTML=`<div class="toast ${isError?'error':''}">${e(message)}</div>`; clearTimeout(toast.timer); toast.timer=setTimeout(()=>{root.textContent='';},3800); }
-function setLanguage(lang) { state.lang=lang; localStorage.setItem('cineva-lang',lang); document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr'; $('langSwitch').textContent=lang==='ar'?'EN':'عربي'; document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)}); updateHeader(); render(); if(state.authOpen) renderModal(); }
+function setLanguage(lang) { state.lang=lang; localStorage.setItem('movie_house-lang',lang); document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr'; $('langSwitch').textContent=lang==='ar'?'EN':'عربي'; document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)}); updateHeader(); render(); if(state.authOpen) renderModal(); }
 function updateHeader() {
   const c=$('accountControls');
   c.innerHTML=state.user ? `<div class="account-wrap"><button class="account-button" type="button" data-action="account"><span class="account-avatar">${e(state.user.name[0].toUpperCase())}</span><span class="account-name">${e(state.user.name.split(' ')[0])}</span></button><button class="logout-btn" type="button" data-action="logout">${t('logOut')}</button></div>` : btn(t('signIn'),'button-small button-outline','data-action="open-auth"');
@@ -74,9 +81,10 @@ function genreFilters() { return `<div class="filters" role="group" aria-label="
 function movieSection() {const filtered=state.config.movies.filter(m=>state.filter==='all'||m.genre===state.filter);return `<section class="section" id="movie-section"><div class="section-intro"><div><span class="eyebrow">${t('nowPlaying')}</span><h2 class="section-title">${t('movieSectionTitle')}</h2><p class="section-desc">${t('movieSectionDesc')}</p></div><a class="text-link" href="#/movies">${t('seeAll')} ${dirArrow()}</a></div>${genreFilters()}<div class="movie-grid">${filtered.map(movieCard).join('')}</div></section>`;}
 function renderHome() {
   const hero=state.config.movies[0];
-  app.innerHTML=`<div class="fadein"><section class="hero"><div class="hero-copy"><span class="eyebrow hero-kicker">${t('heroKicker')}</span><h1>${t('heroTitle')}</h1><p class="hero-text">${t('heroDesc')}</p><div class="hero-buttons"><a href="#/movies" class="button button-primary button-large">${t('explore')} ${dirArrow()}</a><a href="#/how" class="button button-outline button-large">${t('howItWorks')} ${dirArrow()}</a></div><div class="hero-trust"><div class="trust-avatars"><span>A</span><span>M</span><span>Y</span></div><span>★ ★ ★ ★ ★ &nbsp; ${t('trusted')}</span></div></div><div class="hero-art"><div class="hero-frame"><img src="${hero.image}" alt="Nebula Rising cinematic artwork"><div class="hero-frame-info"><span class="tag">${t('featuredLabel')}</span><h3>NEBULA<br>RISING</h3><p>SCI-FI · 128 MIN · 2026</p></div></div><div class="floating-rating"><span class="star">★</span><div><b>8.9 / 10</b><small>${t('featured')}</small></div></div><div class="floating-ticket"><small>${t('premium')}</small><strong>${t('featured')}</strong><div class="ticket-mini-meta">CINEVA · 2026</div></div></div></section><section class="stats-strip"><div class="stat-item"><div class="stat-icon">${icons.ticket}</div><div><b>06</b><span>${t('moviesStat')}</span></div></div><div class="stat-item"><div class="stat-icon">${icons.calendar}</div><div><b>05</b><span>${t('datesStat')}</span></div></div><div class="stat-item"><div class="stat-icon">${icons.chair}</div><div><b>96</b><span>${t('seatsStat')}</span></div></div></section>${movieSection()}<section class="how-section" id="how-section"><span class="eyebrow">CINEVA</span><h2>${t('simpleSteps')}</h2><div class="steps-row"><div class="how-step"><div class="step-icon">${icons.ticket}</div><h3>01 — ${t('stepOne')}</h3><p>${t('stepOneDesc')}</p></div><div class="how-step"><div class="step-icon">${icons.chair}</div><h3>02 — ${t('stepTwo')}</h3><p>${t('stepTwoDesc')}</p></div><div class="how-step"><div class="step-icon">${icons.check}</div><h3>03 — ${t('stepThree')}</h3><p>${t('stepThreeDesc')}</p></div></div></section></div>`;
+  app.innerHTML=`<div class="fadein"><section class="hero"><div class="hero-copy"><span class="eyebrow hero-kicker">${t('heroKicker')}</span><h1>${t('heroTitle')}</h1><p class="hero-text">${t('heroDesc')}</p><div class="hero-buttons"><a href="#/movies" class="button button-primary button-large">${t('explore')} ${dirArrow()}</a><a href="#/how" class="button button-outline button-large">${t('howItWorks')} ${dirArrow()}</a></div><div class="hero-trust"><div class="trust-avatars"><span>A</span><span>M</span><span>Y</span></div><span>★ ★ ★ ★ ★ &nbsp; ${t('trusted')}</span></div></div><div class="hero-art"><div class="hero-frame"><img src="${hero.image}" alt="Nebula Rising cinematic artwork"><div class="hero-frame-info"><span class="tag">${t('featuredLabel')}</span><h3>NEBULA<br>RISING</h3><p>SCI-FI · 128 MIN · 2026</p></div></div><div class="floating-rating"><span class="star">★</span><div><b>8.9 / 10</b><small>${t('featured')}</small></div></div><div class="floating-ticket"><small>${t('premium')}</small><strong>${t('featured')}</strong><div class="ticket-mini-meta">MOVIE HOUSE · 2026</div></div></div></section><section class="stats-strip"><div class="stat-item"><div class="stat-icon">${icons.ticket}</div><div><b>06</b><span>${t('moviesStat')}</span></div></div><div class="stat-item"><div class="stat-icon">${icons.calendar}</div><div><b>05</b><span>${t('datesStat')}</span></div></div><div class="stat-item"><div class="stat-icon">${icons.chair}</div><div><b>96</b><span>${t('seatsStat')}</span></div></div></section>${movieSection()}<section class="how-section" id="how-section"><span class="eyebrow">MOVIE HOUSE</span><h2>${t('simpleSteps')}</h2><div class="steps-row"><div class="how-step"><div class="step-icon">${icons.ticket}</div><h3>01 — ${t('stepOne')}</h3><p>${t('stepOneDesc')}</p></div><div class="how-step"><div class="step-icon">${icons.chair}</div><h3>02 — ${t('stepTwo')}</h3><p>${t('stepTwoDesc')}</p></div><div class="how-step"><div class="step-icon">${icons.check}</div><h3>03 — ${t('stepThree')}</h3><p>${t('stepThreeDesc')}</p></div></div></section></div>`;
   const route=parseRoute()[0]; if (route==='movies'||route==='how') requestAnimationFrame(()=>$(route==='how'?'how-section':'movie-section')?.scrollIntoView({behavior:'smooth',block:'start'}));
 }
+// حساب السعر المبدئي للمقاعد ورسوم الخدمة.
 function currentPricing() {const m=getMovie(state.movieId);const seats=[...state.seats];const subtotal=seats.reduce((sum,s)=>sum+m.price+('GH'.includes(s[0])?2.5:0),0);const fee=seats.length*.5;return {subtotal,fee,total:subtotal+fee};}
 function renderSeats() {
   const root=$('seatRoot');if(!root)return;
@@ -96,6 +104,7 @@ function renderBooking() {
   app.innerHTML=`<div class="fadein"><div class="page-heading"><div class="crumbs"><a href="#/">${t('home')}</a><span>/</span><a href="#/movies">${t('navMovies')}</a><span>/</span><span>${e(movieName(m))}</span></div><h1>${t('bookingTitle')}</h1><p>${t('bookingIntro')}</p></div><div class="booking-grid"><div class="booking-main"><section class="booking-feature"><img src="${e(m.image)}" alt="${e(m.title)}"><div class="booking-feature-copy"><span class="feature-kicker">${t('nowShowing')}</span><h2>${e(movieName(m))}</h2><p>${e(state.lang==='ar'?m.descAr:m.desc)}</p><div class="feature-tags"><span>${genreName(m.genre)}</span><span>${m.runtime} ${t('minutes')}</span><span>★ ${m.rating}</span><span>${m.age}</span></div></div></section><section class="booking-section"><div class="booking-section-head"><span class="step-number">01</span><h3>${t('selectShowing')}</h3></div><div class="time-title">${t('chooseDate')}</div><div class="date-row">${dates.map((d,i)=>`<button type="button" data-date="${d}" class="date-chip ${d===state.date?'selected':''}"><span>${i===0?t('day0'):i===1?t('day1'):weekday(d)}</span><strong>${Number(d.slice(-2))}</strong><span>${new Intl.DateTimeFormat(state.lang==='ar'?'ar-JO':'en-US',{month:'short',timeZone:'UTC'}).format(new Date(d+'T12:00:00Z'))}</span></button>`).join('')}</div><div class="time-title">${t('chooseTime')}</div><div class="time-row">${state.config.times.map(x=>`<button type="button" data-time="${x}" class="time-chip ${x===state.time?'selected':''}" ${!availableTime(state.date,x)?'disabled':''}>${timeLabel(x)}</button>`).join('')}</div>${!validTimes.length?`<p class="seat-note">${t('noShowings')}</p>`:''}</section><section class="booking-section"><div class="booking-section-head"><span class="step-number">02</span><h3>${t('selectSeats')}</h3><small id="seatCount">${t('seatCount')}: ${state.seats.size}/8</small></div><div id="seatRoot"></div></section></div><aside class="summary-card" id="summaryRoot"></aside></div></div>`;
   renderSeats();renderSummary();
 }
+// تحديث المقاعد المحجوزة قبل تأكيد الاختيار.
 async function refreshSeats() {
   if(!state.movieId||!state.date||!state.time)return;
   const signature=`${state.movieId}|${state.date}|${state.time}`;
@@ -114,7 +123,7 @@ async function renderTicket(id) {
   if(!state.user){renderEmpty('login');return;}
   app.innerHTML=`<div class="loader"><span></span><span></span><span></span></div>`;
   try{const {bookings}=await request('/api/bookings');if(parseRoute()[0]!=='ticket')return;const b=bookings.find(x=>x.id===id);if(!b){location.hash='#/bookings';return;}state.booking=b;
-  app.innerHTML=`<div class="ticket-stage fadein"><div class="success-mark">${icons.check}</div><div class="success-heading"><h1>${t('success')}</h1><p>${t('successDesc')}</p></div><article class="ticket"><div class="ticket-top"><span class="ticket-brand">CINE<span>VA</span></span><span>${t('entryTicket')}</span></div><div class="ticket-body"><img src="${e(b.movie.image)}" alt="${e(b.movie.title)}"><div><h2>${e(state.lang==='ar'?b.movie.titleAr:b.movie.title)}</h2><p>${genreName(b.movie.genre)} · CINEVA CINEMA</p><div class="ticket-meta"><div><small>${t('date')}</small><strong>${fmtDate(b.date)}</strong></div><div><small>${t('time')}</small><strong>${timeLabel(b.time)}</strong></div><div><small>${t('seats')}</small><strong dir="ltr">${e(b.seats.join(' · '))}</strong></div><div><small>${t('total')}</small><strong>${money(b.total)}</strong></div></div></div></div><div class="ticket-dash"></div><div class="ticket-bottom"><div class="ticket-code"><small>${t('ticketId')}</small><strong>${e(b.code)}</strong></div><div class="barcode" aria-label="Decorative ticket barcode"></div></div></article><div class="ticket-action-row">${btn(t('printTicket'),'button-primary','data-action="print"')}<a class="button button-outline" href="#/movies">${t('bookAnother')} ${dirArrow()}</a></div><p class="ticket-disclaimer">${t('ticketDemo')}</p></div>`;
+  app.innerHTML=`<div class="ticket-stage fadein"><div class="success-mark">${icons.check}</div><div class="success-heading"><h1>${t('success')}</h1><p>${t('successDesc')}</p></div><article class="ticket"><div class="ticket-top"><span class="ticket-brand">MOVIE<span> HOUSE</span></span><span>${t('entryTicket')}</span></div><div class="ticket-body"><img src="${e(b.movie.image)}" alt="${e(b.movie.title)}"><div><h2>${e(state.lang==='ar'?b.movie.titleAr:b.movie.title)}</h2><p>${genreName(b.movie.genre)} · MOVIE HOUSE CINEMA</p><div class="ticket-meta"><div><small>${t('date')}</small><strong>${fmtDate(b.date)}</strong></div><div><small>${t('time')}</small><strong>${timeLabel(b.time)}</strong></div><div><small>${t('seats')}</small><strong dir="ltr">${e(b.seats.join(' · '))}</strong></div><div><small>${t('total')}</small><strong>${money(b.total)}</strong></div></div></div></div><div class="ticket-dash"></div><div class="ticket-bottom"><div class="ticket-code"><small>${t('ticketId')}</small><strong>${e(b.code)}</strong></div><div class="barcode" aria-label="Decorative ticket barcode"></div></div></article><div class="ticket-action-row">${btn(t('printTicket'),'button-primary','data-action="print"')}<a class="button button-outline" href="#/movies">${t('bookAnother')} ${dirArrow()}</a></div><p class="ticket-disclaimer">${t('ticketDemo')}</p></div>`;
   }catch{app.innerHTML=`<section class="empty-state"><h2>${t('error')}</h2></section>`;}
 }
 function render() {
@@ -124,7 +133,8 @@ function render() {
     if(state.movieId!==arg){state.movieId=arg;state.date=state.config.dates[0];state.time=state.config.times.find(x=>availableTime(state.date,x))||state.config.times[0];state.seats.clear();state.taken.clear();} renderBooking();refreshSeats();
   }else if(route==='bookings')renderBookings();else if(route==='ticket')renderTicket(arg);else renderHome();
 }
-// Registration policy is mirrored by strongPassword() on the server.
+// شروط كلمة المرور هنا مطابقة لشروط التحقق في الخادم.
+// فحص شروط كلمة المرور أثناء التسجيل والاستعادة.
 function passwordChecks(password) {
   return {
     length: password.length >= 8 && password.length <= 128,
@@ -134,6 +144,7 @@ function passwordChecks(password) {
     symbol: /[^\p{L}\p{N}\s]/u.test(password)
   };
 }
+// إظهار نتيجة تحقق كلمة المرور للمستخدم.
 function updatePasswordGuidance() {
   const input=$('authPassword');
   const rules=$('passwordRules');
@@ -182,6 +193,7 @@ function renderModal() {
 }
 function openAuth(tab='login'){state.authTab=tab;state.authOpen=true;renderModal();}
 function closeAuth(){state.authOpen=false;state.resetToken=null;renderModal();}
+// إرسال طلب استعادة الحساب أو تعيين كلمة مرور جديدة.
 async function submitRecovery(form, mode) {
   const button=$('submitAuth'), error=$('authError');
   const data=Object.fromEntries(new FormData(form));
@@ -204,14 +216,16 @@ async function submitRecovery(form, mode) {
     button.disabled=false;button.textContent=t(mode==='forgot'?'sendResetLink':'resetPasswordButton');
   }
 }
+// قراءة رابط الاستعادة والتحقق من رمزه.
 function openResetLinkIfPresent(){
   const [route,token]=parseRoute();
   if(route!=='reset')return;
-  // Remove token from the address bar as soon as the SPA consumes it.
+  // إخفاء رمز الاستعادة من شريط العنوان بعد قراءته.
   history.replaceState(null,'',location.pathname+location.search+'#/');
   if(!token || !/^[A-Za-z0-9_-]{43}$/.test(token)){openAuth('forgot');toast(t('resetInvalid'),true);return;}
   state.resetToken=token;openAuth('reset');
 }
+// إرسال بيانات تسجيل الحساب أو الدخول للخادم.
 async function submitAuth(form) {
   const data=Object.fromEntries(new FormData(form));
   if (state.authTab==='register' && !Object.values(passwordChecks(data.password||'')).every(Boolean)) {
@@ -224,6 +238,7 @@ async function submitAuth(form) {
   try{const result=await request(`/api/auth/${state.authTab==='register'?'register':'login'}`,{method:'POST',body:JSON.stringify(data)});state.user=result.user;closeAuth();updateHeader();toast(t('loginSuccess'));const route=parseRoute()[0];if(route==='bookings'||route==='ticket')render();}
   catch(err){const error=$('authError');if(error)error.textContent=err.message||t('authError');button.disabled=false;button.textContent=t(state.authTab==='register'?'createAccount':'login');}
 }
+// إرسال الحجز والتحقق من تسجيل الدخول وتعارض المقاعد.
 async function confirmBooking() {
   if(!state.seats.size)return toast(t('selectSeatFirst'),true);
   if(!state.user){openAuth();toast(t('needLogin'));return;}
@@ -233,21 +248,31 @@ async function confirmBooking() {
   finally{if(button){button.disabled=false;button.textContent=t('confirm');}}
 }
 
+// تنفيذ إجراءات المستخدم مثل الحجز والخروج واختيار المقاعد.
 document.addEventListener('click',async event=>{
   const target=event.target.closest('[data-action],[data-filter],[data-seat],[data-date],[data-time],[data-tab]');if(!target)return;
+  // تنفيذ الإجراء المطلوب بحسب الزر المضغوط.
   if(target.dataset.action){switch(target.dataset.action){case 'open-auth':openAuth();break;case 'close-auth':closeAuth();break;case 'forgot-password':openAuth('forgot');break;case 'back-to-login':state.resetToken=null;openAuth('login');break;case 'toggle-password':{const input=$(target.dataset.target||'authPassword');if(!input)break;const visible=input.type==='password';input.type=visible?'text':'password';target.setAttribute('aria-pressed',String(visible));target.setAttribute('aria-label',t(visible?'hidePassword':'showPassword'));target.title=t(visible?'hidePassword':'showPassword');target.innerHTML=visible?icons.eyeOff:icons.eye;break;}case 'account':location.hash='#/bookings';break;case 'logout':try{await request('/api/auth/logout',{method:'POST',body:'{}'});state.user=null;updateHeader();render();}catch{toast(t('error'),true);}break;case 'confirm-booking':confirmBooking();break;case 'print':window.print();break;case 'reload':render();break;}return;}
+  // تصفية الأفلام حسب النوع المختار.
   if(target.dataset.filter){state.filter=target.dataset.filter;renderHome();$('movie-section')?.scrollIntoView({block:'start'});return;}
+  // تغيير اليوم وإعادة جلب المقاعد المتاحة.
   if(target.dataset.date){state.date=target.dataset.date;state.time=state.config.times.find(x=>availableTime(state.date,x))||state.config.times[0];state.seats.clear();state.taken.clear();renderBooking();refreshSeats();return;}
+  // تغيير وقت العرض وإعادة فحص المقاعد.
   if(target.dataset.time){state.time=target.dataset.time;state.seats.clear();state.taken.clear();renderBooking();refreshSeats();return;}
+  // تحديد المقعد أو إلغاء تحديده بحد أقصى ثمانية.
   if(target.dataset.seat){const seat=target.dataset.seat;if(state.taken.has(seat))return;if(state.seats.has(seat))state.seats.delete(seat);else{if(state.seats.size>=8)return toast(t('seatMax'),true);state.seats.add(seat);}renderSeats();renderSummary();return;}
+  // تحديد وضع الدخول أو إنشاء الحساب.
   if(target.dataset.tab){state.authTab=target.dataset.tab;renderModal();}
 });
+// إعادة فحص كلمة المرور عند الكتابة.
 modalRoot.addEventListener('input',event=>{if(event.target.id==='authPassword'&&['register','reset'].includes(state.authTab))updatePasswordGuidance();});
+// توجيه نماذج الحساب والاستعادة إلى الدوال المناسبة.
 modalRoot.addEventListener('submit',event=>{if(event.target.id==='authForm'){event.preventDefault();submitAuth(event.target);}else if(['forgotForm','resetForm'].includes(event.target.id)){event.preventDefault();submitRecovery(event.target,state.authTab);}});
 modalRoot.addEventListener('click',event=>{if(event.target.id==='modalOverlay')closeAuth();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.authOpen)closeAuth();});
 $('langSwitch').addEventListener('click',()=>setLanguage(state.lang==='ar'?'en':'ar'));
 window.addEventListener('hashchange',()=>{openResetLinkIfPresent();render();if(!['movies','how'].includes(parseRoute()[0]))window.scrollTo({top:0,behavior:'instant'});});
+// تحميل بيانات الأفلام والجلسة عند تشغيل الموقع.
 (async function boot(){
   setLanguage(state.lang);
   openResetLinkIfPresent();
